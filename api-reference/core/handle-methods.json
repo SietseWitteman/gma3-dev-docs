@@ -1,0 +1,366 @@
+{
+  "meta": {
+    "title": "Handle Methods JSON Reference",
+    "description": "JSON snippets and IDE integration data for MA3 Handle methods",
+    "version": "MA3 API 2.2",
+    "category": "core"
+  },
+  "methods": {
+    "Addr": {
+      "signature": "Handle:Addr(baseLocationHandle?, useToAddrIndex?, isCueObject?)",
+      "parameters": [
+        {
+          "name": "baseLocationHandle",
+          "type": "Handle",
+          "optional": true,
+          "description": "Optional base location (default: root)"
+        },
+        {
+          "name": "useToAddrIndex",
+          "type": "boolean",
+          "optional": true,
+          "description": "Optional use ToAddr index instead of Addr index"
+        },
+        {
+          "name": "isCueObject",
+          "type": "boolean",
+          "optional": true,
+          "description": "Optional fix cue address resolution"
+        }
+      ],
+      "returns": {
+        "type": "string",
+        "description": "Command-compatible address string"
+      },
+      "snippet": "local address = ${1:object}:Addr(${2:baseLocation}, ${3:useToAddrIndex}, ${4:isCueObject})",
+      "example": "local fixture = Obj()\nlocal address = fixture:Addr()\nCmd(\"Fixture \" .. address .. \" At 100\")"
+    },
+    "AddrNative": {
+      "signature": "Handle:AddrNative(baseLocationHandle?, returnNamesInQuotes?)",
+      "parameters": [
+        {
+          "name": "baseLocationHandle",
+          "type": "Handle",
+          "optional": true,
+          "description": "Optional base location (default: root)"
+        },
+        {
+          "name": "returnNamesInQuotes",
+          "type": "boolean",
+          "optional": true,
+          "description": "Optional return names in quotes"
+        }
+      ],
+      "returns": {
+        "type": "string",
+        "description": "Native format address string"
+      },
+      "snippet": "local nativeAddr = ${1:object}:AddrNative(${2:baseLocation}, ${3:returnNamesInQuotes})",
+      "example": "local group = Obj()\nlocal nativeAddr = group:AddrNative()\nPrintf(\"Native address: \" .. nativeAddr)"
+    },
+    "ToAddr": {
+      "signature": "Handle:ToAddr(returnName)",
+      "parameters": [
+        {
+          "name": "returnName",
+          "type": "boolean",
+          "required": true,
+          "description": "true=return name, false=return type and index"
+        }
+      ],
+      "returns": {
+        "type": "string",
+        "description": "Address string in requested format"
+      },
+      "snippet": "local address = ${1:object}:ToAddr(${2:returnName})",
+      "example": "local obj = Obj()\nlocal nameAddr = obj:ToAddr(true)   -- \"MyFixture\"\nlocal indexAddr = obj:ToAddr(false) -- \"Fixture 1\""
+    },
+    "Children": {
+      "signature": "Handle:Children()",
+      "parameters": [],
+      "returns": {
+        "type": "table",
+        "description": "Array of child Handle objects"
+      },
+      "snippet": "local children = ${1:object}:Children()",
+      "example": "local parent = Obj()\nlocal children = parent:Children()\nfor i, child in ipairs(children) do\n    Printf(\"Child \" .. i .. \": \" .. child:ToAddr(true))\nend"
+    },
+    "Count": {
+      "signature": "Handle:Count()",
+      "parameters": [],
+      "returns": {
+        "type": "integer",
+        "description": "Number of immediate child objects"
+      },
+      "snippet": "local count = ${1:object}:Count()",
+      "example": "local parent = Obj()\nlocal childCount = parent:Count()\nPrintf(\"This object has \" .. childCount .. \" children\")"
+    },
+    "Ptr": {
+      "signature": "Handle:Ptr(childIndex)",
+      "parameters": [
+        {
+          "name": "childIndex",
+          "type": "integer",
+          "required": true,
+          "description": "1-based index of child object"
+        }
+      ],
+      "returns": {
+        "type": "Handle|nil",
+        "description": "Child handle or nil if index invalid"
+      },
+      "snippet": "local child = ${1:object}:Ptr(${2:childIndex})",
+      "example": "local parent = Obj()\nlocal firstChild = parent:Ptr(1)\nif firstChild then\n    Printf(\"First child: \" .. firstChild:ToAddr(true))\nend"
+    },
+    "GetClass": {
+      "signature": "Handle:GetClass()",
+      "parameters": [],
+      "returns": {
+        "type": "string",
+        "description": "Class name (e.g., \"Fixture\", \"Group\", \"Cue\")"
+      },
+      "snippet": "local className = ${1:object}:GetClass()",
+      "example": "local obj = Obj()\nlocal class = obj:GetClass()\nif class == \"Fixture\" then\n    -- Handle fixture-specific logic\nend"
+    },
+    "GetChildClass": {
+      "signature": "Handle:GetChildClass()",
+      "parameters": [],
+      "returns": {
+        "type": "string",
+        "description": "Class name of child objects"
+      },
+      "snippet": "local childClass = ${1:object}:GetChildClass()",
+      "example": "local container = Obj()\nlocal childClass = container:GetChildClass()\nPrintf(\"This container holds: \" .. childClass .. \" objects\")"
+    },
+    "Get": {
+      "signature": "Handle:Get(propertyName, roleInteger?)",
+      "parameters": [
+        {
+          "name": "propertyName",
+          "type": "string",
+          "required": true,
+          "description": "Name of property to retrieve"
+        },
+        {
+          "name": "roleInteger",
+          "type": "integer",
+          "optional": true,
+          "description": "Optional role for text formatting"
+        }
+      ],
+      "returns": {
+        "type": "string",
+        "description": "Property value as string"
+      },
+      "snippet": "local value = ${1:object}:Get(\"${2:propertyName}\", ${3:roleInteger})",
+      "example": "local fixture = Obj()\nlocal name = fixture:Get(\"name\")\nlocal intensity = fixture:Get(\"intensity\")"
+    },
+    "Dump": {
+      "signature": "Handle:Dump()",
+      "parameters": [],
+      "returns": {
+        "type": "void",
+        "description": "Prints object information to console"
+      },
+      "snippet": "${1:object}:Dump()",
+      "example": "local obj = Obj()\nobj:Dump()  -- Prints detailed object info to console"
+    },
+    "GetDependencies": {
+      "signature": "Handle:GetDependencies()",
+      "parameters": [],
+      "returns": {
+        "type": "table",
+        "description": "Array of dependent object handles"
+      },
+      "snippet": "local dependencies = ${1:object}:GetDependencies()",
+      "example": "local cue = Obj()\nlocal deps = cue:GetDependencies()\nPrintf(\"This cue depends on \" .. #deps .. \" objects\")"
+    },
+    "GetReferences": {
+      "signature": "Handle:GetReferences()",
+      "parameters": [],
+      "returns": {
+        "type": "string",
+        "description": "Reference information"
+      },
+      "snippet": "local references = ${1:object}:GetReferences()",
+      "example": "local group = Obj()\nlocal refs = group:GetReferences()\nPrintf(\"Referenced by: \" .. refs)"
+    },
+    "GetUIEditor": {
+      "signature": "Handle:GetUIEditor()",
+      "parameters": [],
+      "returns": {
+        "type": "string",
+        "description": "Name of UI editor"
+      },
+      "snippet": "local editor = ${1:object}:GetUIEditor()",
+      "example": "local obj = Obj()\nlocal editor = obj:GetUIEditor()\nPrintf(\"Edit with: \" .. editor)"
+    },
+    "GetUISettings": {
+      "signature": "Handle:GetUISettings()",
+      "parameters": [],
+      "returns": {
+        "type": "string",
+        "description": "Name of settings panel"
+      },
+      "snippet": "local settings = ${1:object}:GetUISettings()",
+      "example": "local obj = Obj()\nlocal settings = obj:GetUISettings()\nPrintf(\"Settings panel: \" .. settings)"
+    },
+    "GetFader": {
+      "signature": "Handle:GetFader(tokenAndIndex)",
+      "parameters": [
+        {
+          "name": "tokenAndIndex",
+          "type": "table",
+          "required": true,
+          "description": "{token=\"FaderMaster|FaderX|FaderRate|etc\", index=number}"
+        }
+      ],
+      "returns": {
+        "type": "number",
+        "description": "Current fader value (0.0 to 1.0)"
+      },
+      "snippet": "local faderValue = ${1:object}:GetFader({token=\"${2:FaderMaster}\", index=${3:1}})",
+      "example": "local sequence = Obj()\nlocal faderValue = sequence:GetFader({token=\"FaderMaster\", index=1})\nPrintf(\"Fader at: \" .. (faderValue * 100) .. \"%\")"
+    },
+    "GetFaderText": {
+      "signature": "Handle:GetFaderText(tokenAndIndex)",
+      "parameters": [
+        {
+          "name": "tokenAndIndex",
+          "type": "table",
+          "required": true,
+          "description": "{token=\"FaderMaster|FaderX|FaderRate|etc\", index=number}"
+        }
+      ],
+      "returns": {
+        "type": "string",
+        "description": "Formatted fader text"
+      },
+      "snippet": "local faderText = ${1:object}:GetFaderText({token=\"${2:FaderMaster}\", index=${3:1}})",
+      "example": "local sequence = Obj()\nlocal faderText = sequence:GetFaderText({token=\"FaderMaster\", index=1})\nPrintf(\"Fader: \" .. faderText)"
+    },
+    "SetFader": {
+      "signature": "Handle:SetFader(settingsTable)",
+      "parameters": [
+        {
+          "name": "settingsTable",
+          "type": "table",
+          "required": true,
+          "description": "{value=number, token=\"FaderMaster|etc\", faderEnabled=boolean}"
+        }
+      ],
+      "returns": {
+        "type": "void",
+        "description": "Sets fader value"
+      },
+      "snippet": "${1:object}:SetFader({value=${2:0.75}, token=\"${3:FaderMaster}\", faderEnabled=${4:true}})",
+      "example": "local sequence = Obj()\nsequence:SetFader({\n    value = 0.75,\n    token = \"FaderMaster\",\n    faderEnabled = true\n})"
+    },
+    "HasActivePlayback": {
+      "signature": "Handle:HasActivePlayback()",
+      "parameters": [],
+      "returns": {
+        "type": "boolean",
+        "description": "true if object is actively playing"
+      },
+      "snippet": "local isActive = ${1:object}:HasActivePlayback()",
+      "example": "local cue = Obj()\nif cue:HasActivePlayback() then\n    Printf(\"Cue is currently active\")\nend"
+    },
+    "Export": {
+      "signature": "Handle:Export(filePath, fileName)",
+      "parameters": [
+        {
+          "name": "filePath",
+          "type": "string",
+          "required": true,
+          "description": "Directory path for export"
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "required": true,
+          "description": "Name of file to create"
+        }
+      ],
+      "returns": {
+        "type": "boolean",
+        "description": "true if export succeeded"
+      },
+      "snippet": "local success = ${1:object}:Export(\"${2:/path/to/exports/}\", \"${3:backup.xml}\")",
+      "example": "local showdata = Obj()\nlocal success = showdata:Export(\"/path/to/exports/\", \"backup.xml\")\nif success then\n    Printf(\"Export completed successfully\")\nend"
+    },
+    "Import": {
+      "signature": "Handle:Import(filePath, fileName)",
+      "parameters": [
+        {
+          "name": "filePath",
+          "type": "string",
+          "required": true,
+          "description": "Directory path containing file"
+        },
+        {
+          "name": "fileName",
+          "type": "string",
+          "required": true,
+          "description": "Name of file to import"
+        }
+      ],
+      "returns": {
+        "type": "boolean",
+        "description": "true if import succeeded"
+      },
+      "snippet": "local success = ${1:object}:Import(\"${2:/path/to/imports/}\", \"${3:data.xml}\")",
+      "example": "local showdata = Obj()\nlocal success = showdata:Import(\"/path/to/imports/\", \"data.xml\")\nif success then\n    Printf(\"Import completed successfully\")\nend"
+    }
+  },
+  "globalFunctions": {
+    "Obj": {
+      "signature": "Obj(objectPath?)",
+      "parameters": [
+        {
+          "name": "objectPath",
+          "type": "string",
+          "optional": true,
+          "description": "Optional path to specific object"
+        }
+      ],
+      "returns": {
+        "type": "Handle|nil",
+        "description": "Handle to object or nil if not found"
+      },
+      "snippet": "local ${1:object} = Obj(${2:\"objectPath\"})",
+      "examples": [
+        "-- Get currently selected object\nlocal selected = Obj()",
+        "-- Get specific fixture\nlocal fixture1 = Obj(\"Fixture 1\")",
+        "-- Get root object\nlocal root = Obj(\"Root\")"
+      ]
+    }
+  },
+  "commonPatterns": {
+    "safeObjectAccess": {
+      "description": "Safe pattern for accessing objects with validation",
+      "snippet": "local ${1:obj} = Obj(${2:path})\nif ${1:obj} then\n    local ${3:property} = ${1:obj}:Get(\"${4:propertyName}\")\n    Printf(\"${5:Object}: \" .. ${3:property})\nend"
+    },
+    "hierarchyNavigation": {
+      "description": "Pattern for navigating object hierarchies",
+      "snippet": "local ${1:parent} = Obj(${2:path})\nlocal children = ${1:parent}:Children()\nfor i, child in ipairs(children) do\n    Printf(\"Child \" .. i .. \": \" .. child:ToAddr(true))\nend"
+    },
+    "propertyWithDefault": {
+      "description": "Property access with default value",
+      "snippet": "local function getProperty(obj, prop, default)\n    if not obj then return default end\n    local value = obj:Get(prop)\n    return value ~= \"\" and value or default\nend"
+    },
+    "commandSafeAddressing": {
+      "description": "Safe addressing for command execution",
+      "snippet": "local ${1:obj} = Obj(${2:path})\nif ${1:obj} then\n    local addr = ${1:obj}:Addr()\n    Cmd(\"${3:Command} \" .. addr ${4:.. \" ${5:Parameters}\"})\nend"
+    },
+    "typeSafeHandling": {
+      "description": "Type-safe object handling pattern",
+      "snippet": "local ${1:obj} = Obj(${2:path})\nif ${1:obj} and ${1:obj}:GetClass() == \"${3:ExpectedClass}\" then\n    -- Handle ${3:ExpectedClass}-specific operations\n    local ${4:property} = ${1:obj}:Get(\"${5:propertyName}\")\nend"
+    }
+  },
+  "codeSnippets": {
+    "handleValidation": "if not ${1:handle} then\n    Printf(\"Error: Invalid handle\")\n    return\nend",
+    "childIteration": "for i = 1, ${1:parent}:Count() do\n    local child = ${1:parent}:Ptr(i)\n    if child then\n        ${2:-- Process child}\n    end\nend",
+    "propertyLoop": "local properties = {${1:\"name\", \"class\", \"index\"}}\nfor _, prop in ipairs(properties) do\n    local value = ${2:object}:Get(prop)\n    Printf(prop .. \": \" .. value)\nend"
+  }
+}
