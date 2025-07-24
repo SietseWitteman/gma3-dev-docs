@@ -2,6 +2,7 @@
 
 ## Overview
 After loads of struggle with finding correct and complete documentation for GrandMA 3 plugins, I decided to make my own.
+
 **Disclaimer**
 
 **THIS IS FULLY MADE WITH AI. I JUST FED IT DOCUMENTATION I FOUND MYSELF. I CANNOT GUARANTEE CORRECTNESS.**
